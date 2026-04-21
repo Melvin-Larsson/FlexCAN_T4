@@ -1004,7 +1004,9 @@ FCTP_FUNC bool FCTP_OPT::struct2queueTx(const CAN_message_t &msg) {
   if ( txBuffer.size() == txBuffer.capacity() ) return 0; /* no queues available */
   uint8_t buf[sizeof(CAN_message_t)];
   memmove(buf, &msg, sizeof(msg));
+  NVIC_DISABLE_IRQ(nvicIrq);
   txBuffer.push_back(buf, sizeof(CAN_message_t));
+  NVIC_ENABLE_IRQ(nvicIrq);
   return -1; /* transmit entry failed, no mailboxes available, queued */
 }
 
